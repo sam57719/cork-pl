@@ -16,7 +16,6 @@ class Interpreter:
     def __not_implemented(self, node):
         raise NotImplementedError(f'{node.__class__.__name__} not implemented properly')
 
-    # noinspection PyMethodMayBeStatic
     def visit_NumberNode(self, node):
         return Number(node.value)
 

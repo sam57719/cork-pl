@@ -1,5 +1,5 @@
 from tokens import TokenType, Token
-from exceptions import IllegalCharacterError
+from exceptions import IllegalCharacter
 
 SINGLE_CHAR_TOKEN_TYPES = [t.value for t in TokenType if t.value is not None and len(t.value) == 1]
 
@@ -32,19 +32,19 @@ class Lexer:
 
             # Retrieve and build the full number as one token
             elif self.current_char.isdigit() or self.current_char == '.':
-                yield self._generate_number()
+                yield self._generate_number(), None
 
             # Check if this '/' is part of a '//' operation
             elif self.current_char == '/':
-                yield self._make_divide_or_floor()
+                yield self._make_divide_or_floor(), None
 
             # Get any single character tokens that haven't already been processed
             elif self.current_char in SINGLE_CHAR_TOKEN_TYPES:
                 self.advance()
-                yield Token(TokenType(current_char))
+                yield Token(TokenType(current_char)), None
 
             else:
-                raise IllegalCharacterError(current_char)
+                yield None, IllegalCharacter(current_char)
 
     def _generate_number(self):
         """ Builds a number """

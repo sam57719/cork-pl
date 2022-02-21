@@ -3,36 +3,35 @@ from parser_ import Parser
 from interpreter import Interpreter
 
 
-DEBUG = {
-    'tree': False,
-}
-
-
-def main(debug=DEBUG):
+def main():
     while True:
+        text = input('cork> ')
+        lexer = Lexer(text)
+        tokens = lexer.generate_tokens()
 
-        try:
-            text = input('cork> ')
-            lexer = Lexer(text)
-            tokens = lexer.generate_tokens()
+        # Parse the tokens into an AST
+        parser = Parser(tokens, text)
+        tree, error = parser.parse()
 
-            # Parse the tokens into an AST
-            parser = Parser(tokens, text)
-            tree = parser.parse()
+        # Did we get an error from the lexer/parser? If so, display it
+        if error:
+            print(error)
 
-            if DEBUG['tree']:
-                print(f'DEBUG {tree=}')
+        # Interpret the tree (if we have one), and display the value
+        elif tree:
+            interpreter = Interpreter()
+            value = interpreter.visit(tree)
+            error = interpreter.error
 
-            # Interpret the tree (if we have one)
-            if tree:
-                interpreter = Interpreter()
-                value = interpreter.visit(tree)
+            # If we have an error, show it
+            if error:
+                print(error)
+            else:
                 print(value)
-
-        except Exception as e:
-            print(e)
 
 
 if __name__ == '__main__':
-    main()
-
+    try:
+        main()
+    except KeyboardInterrupt:
+        print('\nExiting cork...')

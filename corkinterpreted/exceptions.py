@@ -1,28 +1,44 @@
-class IllegalCharacterError(Exception):
-    """ Raise when an Illegal character is found """
-    def __init__(self, character):
-        message = f'Illegal Character \'{character}\''
-        super().__init__(message)
+class Error:
+    def __init__(self, details=None):
+        self.error_name = self.__class__.__name__
+        self.details = details
+
+    def __repr__(self):
+        result = f'{self.error_name}'
+
+        # Add the details if specified
+        if self.details:
+            result += f': {self.details}'
+
+        return result
 
 
-class InvalidSyntaxError(Exception):
-    """ Raise when the syntax is invalid """
+class IllegalCharacter(Error):
+    def __init__(self, character=None):
+        details = f'Invalid character \'{character}\'' if character else None
+        super().__init__(details)
+
+
+class InvalidSyntax(Error):
     def __init__(self):
-        message = f'Invalid syntax'
-        super().__init__(message)
+        super().__init__()
 
 
-class ZeroDivisionError(Exception):
-    """ Raise when dividing by 0 """
+# noinspection PyShadowingBuiltins
+class ZeroDivisionError(Error):
     def __init__(self):
-        message = f'Cannot divide by 0'
-        super().__init__(message)
+        details = 'Cannot divide by zero'
+        super().__init__(details)
 
 
-class ComplexNumbersNotSupported(Exception):
-    """ Raise when a complex number is produced """
+class ComplexNumbersNotSupported(Error):
     def __init__(self):
-        message = f'Complex numbers are not supported'
-        super().__init__(message)
+        details = f'Complex numbers are not supported'
+        super().__init__(details)
 
 
+# noinspection PyShadowingBuiltins
+class NotImplementedError(Error):
+    def __init__(self, method):
+        details = f'{method} not implemented properly - no visit_ method defined'
+        super().__init__(details)

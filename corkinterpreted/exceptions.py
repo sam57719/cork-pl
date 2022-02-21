@@ -24,7 +24,6 @@ class InvalidSyntax(Error):
         super().__init__()
 
 
-# noinspection PyShadowingBuiltins
 class ZeroDivisionError(Error):
     def __init__(self):
         details = 'Cannot divide by zero'
@@ -37,7 +36,6 @@ class ComplexNumbersNotSupported(Error):
         super().__init__(details)
 
 
-# noinspection PyShadowingBuiltins
 class NotImplementedError(Error):
     def __init__(self, method):
         details = f'{method} not implemented properly - no visit_ method defined'

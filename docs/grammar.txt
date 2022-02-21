@@ -1,0 +1,13 @@
+expr        : term ((PLUS|MINUS) term)*
+
+term        : factor ((MULTIPLY|DIVIDE|FLOOR|MOD) factor)*
+
+factor      : (PLUS|MINUS) factor
+            : power
+
+power       : atom (POWER factor)*
+
+atom        : number
+            : LPAREN expr RPAREN
+
+number      : INTEGER|FLOAT

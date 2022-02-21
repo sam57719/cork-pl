@@ -1,6 +1,7 @@
-from exceptions import InvalidSyntaxError
+from exceptions import InvalidSyntax
 from nodes import *
 from tokens import TokenType
+from decorators import check_for_instance_error
 
 
 class Parser:
@@ -8,21 +9,22 @@ class Parser:
         self.tokens = iter(tokens)
         self.text = text
         self.current_token = None
+        self.error = None
 
         self.advance()
 
     def advance(self):
         try:
-            self.current_token = next(self.tokens)
+            self.current_token, self.error = next(self.tokens)
         except StopIteration:
             self.current_token = None
 
     def raise_error(self):
-        raise InvalidSyntaxError
+        self.error = InvalidSyntax()
 
     def parse(self):
         if self.current_token is None:
-            return None
+            return None, self.error
 
         result = self.expr()
 
@@ -30,13 +32,17 @@ class Parser:
         if self.current_token is not None:
             self.raise_error()
 
-        return result
+        return result, self.error
 
+    @check_for_instance_error(method_has_return=True)
     def expr(self):
         """
         Arithmetic Expression
         expr    : term ((PLUS|MINUS) term)*
         """
+
+        if self.current_token is None:
+            self.raise_error()
 
         result = self.term()
 
@@ -52,11 +58,15 @@ class Parser:
 
         return result
 
+    @check_for_instance_error(method_has_return=True)
     def term(self):
         """
         Arithmetic Term
         term    : factor ((MULTIPLY|DIVIDE|FLOOR|MOD) factor)*
         """
+
+        if self.current_token is None:
+            self.raise_error()
 
         result = self.factor()
 
@@ -81,12 +91,16 @@ class Parser:
 
         return result
 
+    @check_for_instance_error(method_has_return=True)
     def factor(self):
         """
         Arithmetic Factor
         factor      : (PLUS|MINUS) factor
                     : power
         """
+
+        if self.current_token is None:
+            self.raise_error()
 
         token = self.current_token
 
@@ -100,11 +114,15 @@ class Parser:
 
         return self.power()
 
+    @check_for_instance_error(method_has_return=True)
     def power(self):
         """
         Arithmetic Power
         power       : atom (POWER factor)*
         """
+
+        if self.current_token is None:
+            self.raise_error()
 
         result = self.atom()
 
@@ -114,12 +132,16 @@ class Parser:
 
         return result
 
+    @check_for_instance_error(method_has_return=True)
     def atom(self):
         """
         Atomic Level
         atom        : number
                     : LPAREN expr RPAREN
         """
+
+        if self.current_token is None:
+            self.raise_error()
 
         match self.current_token.type:
             case TokenType.NUMBER:
@@ -137,6 +159,7 @@ class Parser:
 
         self.raise_error()
 
+    @check_for_instance_error(method_has_return=True)
     def number(self):
         """
         Arithmetic Number
@@ -150,3 +173,5 @@ class Parser:
         self.advance()
 
         return NumberNode(token.value)
+
+

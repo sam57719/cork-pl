@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from exceptions import ComplexNumbersNotSupported, ZeroDivisionError
 
+
 @dataclass(eq=True)
 class Number:
     value: int
@@ -11,59 +12,59 @@ class Number:
     def __add__(self, other):
         match other:
             case Number():
-                return self.value + other.value
+                return self.value + other.value, None
             case _:
-                return None
+                return None, None
 
     def __sub__(self, other):
         match other:
             case Number():
-                return self.value - other.value
+                return self.value - other.value, None
             case _:
-                return None
+                return None, None
 
     def __mul__(self, other):
         match other:
             case Number():
-                return self.value * other.value
+                return self.value * other.value, None
             case _:
-                return None
+                return None, None
 
     def __truediv__(self, other):
         match other:
             # Catch division by 0
             case Number(0):
-                raise ZeroDivisionError
+                return None, ZeroDivisionError()
             case Number():
-                return self.value / other.value
+                return self.value / other.value, None
 
     def __floordiv__(self, other):
         match other:
             # Catch division by 0
             case Number(0):
-                raise ZeroDivisionError
+                return None, ZeroDivisionError()
             case Number():
-                return self.value // other.value
+                return self.value // other.value, None
 
     def __mod__(self, other):
         match other:
             # Catch division by 0
             case Number(0):
-                raise ZeroDivisionError
+                return None, ZeroDivisionError()
             case Number():
-                return self.value % other.value
+                return self.value % other.value, None
 
     def __pos__(self):
-        return self.value
+        return self.value, None
 
     def __neg__(self):
-        return -self.value
+        return -self.value, None
 
     def __pow__(self, other):
         match other:
             case Number() if self.value >= 0:
-                return self.value ** other.value
+                return self.value ** other.value, None
             case _ if self.value < 0:
-                raise ComplexNumbersNotSupported
+                return None, ComplexNumbersNotSupported()
             case _:
-                return None
+                return None, None

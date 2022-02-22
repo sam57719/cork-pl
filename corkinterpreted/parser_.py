@@ -1,7 +1,7 @@
 from exceptions import InvalidSyntax
 from nodes import *
 from tokens import TokenType
-from decorators import check_for_instance_error
+from decorators import skip_if_error
 
 
 class Parser:
@@ -34,7 +34,7 @@ class Parser:
 
         return result, self.error
 
-    @check_for_instance_error(method_has_return=True)
+    @skip_if_error
     def expr(self):
         """
         Arithmetic Expression
@@ -58,7 +58,7 @@ class Parser:
 
         return result
 
-    @check_for_instance_error(method_has_return=True)
+    @skip_if_error
     def term(self):
         """
         Arithmetic Term
@@ -91,7 +91,7 @@ class Parser:
 
         return result
 
-    @check_for_instance_error(method_has_return=True)
+    @skip_if_error
     def factor(self):
         """
         Arithmetic Factor
@@ -114,7 +114,7 @@ class Parser:
 
         return self.power()
 
-    @check_for_instance_error(method_has_return=True)
+    @skip_if_error
     def power(self):
         """
         Arithmetic Power
@@ -132,7 +132,7 @@ class Parser:
 
         return result
 
-    @check_for_instance_error(method_has_return=True)
+    @skip_if_error
     def atom(self):
         """
         Atomic Level
@@ -159,7 +159,7 @@ class Parser:
 
         self.raise_error()
 
-    @check_for_instance_error(method_has_return=True)
+    @skip_if_error
     def number(self):
         """
         Arithmetic Number
@@ -173,5 +173,3 @@ class Parser:
         self.advance()
 
         return NumberNode(token.value)
-
-

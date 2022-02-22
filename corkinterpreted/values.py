@@ -12,21 +12,21 @@ class Number:
     def __add__(self, other):
         match other:
             case Number():
-                return self.value + other.value, None
+                return Number(self.value + other.value), None
             case _:
                 return None, None
 
     def __sub__(self, other):
         match other:
             case Number():
-                return self.value - other.value, None
+                return Number(self.value - other.value), None
             case _:
                 return None, None
 
     def __mul__(self, other):
         match other:
             case Number():
-                return self.value * other.value, None
+                return Number(self.value * other.value), None
             case _:
                 return None, None
 
@@ -36,7 +36,9 @@ class Number:
             case Number(0):
                 return None, ZeroDivisionError()
             case Number():
-                return self.value / other.value, None
+                return Number(self.value / other.value), None
+            case _:
+                return None, None
 
     def __floordiv__(self, other):
         match other:
@@ -44,7 +46,9 @@ class Number:
             case Number(0):
                 return None, ZeroDivisionError()
             case Number():
-                return self.value // other.value, None
+                return Number(self.value // other.value), None
+            case _:
+                return None, None
 
     def __mod__(self, other):
         match other:
@@ -52,18 +56,20 @@ class Number:
             case Number(0):
                 return None, ZeroDivisionError()
             case Number():
-                return self.value % other.value, None
+                return Number(self.value % other.value), None
+            case _:
+                return None, None
 
     def __pos__(self):
-        return self.value, None
+        return Number(+self.value), None
 
     def __neg__(self):
-        return -self.value, None
+        return Number(-self.value), None
 
     def __pow__(self, other):
         match other:
             case Number() if self.value >= 0:
-                return self.value ** other.value, None
+                return Number(self.value ** other.value), None
             case _ if self.value < 0:
                 return None, ComplexNumbersNotSupported()
             case _:

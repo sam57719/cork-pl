@@ -12,7 +12,7 @@ class Number:
     def __add__(self, other):
         match other:
             case Number():
-                return self.value + other.value, None
+                return Number(self.value + other.value), None
             case _:
                 return None, None
 

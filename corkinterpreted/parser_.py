@@ -9,6 +9,7 @@ class Parser:
         self.tokens = iter(tokens)
         self.text = text
         self.current_token = None
+        self.token_list = []
         self.error = None
 
         self.advance()
@@ -16,23 +17,22 @@ class Parser:
     def advance(self):
         try:
             self.current_token, self.error = next(self.tokens)
+            self.token_list.append(self.current_token)
         except StopIteration:
             self.current_token = None
 
-    def raise_error(self):
-        self.error = InvalidSyntax()
-
     def parse(self):
         if self.current_token is None:
-            return None, self.error
+            return None
 
         result = self.expr()
 
         # If we reach here and we haven't processed all the tokens, then there must be a syntax error
         if self.current_token is not None:
-            self.raise_error()
+            self.error = InvalidSyntax()
+            return None
 
-        return result, self.error
+        return result
 
     @skip_if_error
     def expr(self):
@@ -42,7 +42,8 @@ class Parser:
         """
 
         if self.current_token is None:
-            self.raise_error()
+            self.error = InvalidSyntax()
+            return None
 
         result = self.term()
 
@@ -66,7 +67,8 @@ class Parser:
         """
 
         if self.current_token is None:
-            self.raise_error()
+            self.error = InvalidSyntax()
+            return None
 
         result = self.factor()
 
@@ -100,7 +102,8 @@ class Parser:
         """
 
         if self.current_token is None:
-            self.raise_error()
+            self.error = InvalidSyntax()
+            return None
 
         token = self.current_token
 
@@ -122,7 +125,8 @@ class Parser:
         """
 
         if self.current_token is None:
-            self.raise_error()
+            self.error = InvalidSyntax()
+            return None
 
         result = self.atom()
 
@@ -141,7 +145,8 @@ class Parser:
         """
 
         if self.current_token is None:
-            self.raise_error()
+            self.error = InvalidSyntax()
+            return None
 
         match self.current_token.type:
             case TokenType.NUMBER:
@@ -152,12 +157,12 @@ class Parser:
                 result = self.expr()
 
                 if self.current_token is None or self.current_token.type != TokenType.RPAREN:
-                    self.raise_error()
+                    self.error = InvalidSyntax()
 
                 self.advance()
                 return result
 
-        self.raise_error()
+        self.error = InvalidSyntax()
 
     @skip_if_error
     def number(self):
@@ -167,7 +172,7 @@ class Parser:
         """
 
         if self.current_token is None:
-            self.raise_error()
+            self.error = InvalidSyntax()
 
         token = self.current_token
         self.advance()

@@ -13,7 +13,7 @@ class Interpreter:
         return method(node)
 
     def __not_implemented(self, node):
-        raise NotImplementedError(f'{node.__class__.__name__} not implemented properly')
+        self.error = NotImplementedError(f'{node.__class__.__name__} not implemented properly')
 
     def visit_NumberNode(self, node):
         return Number(node.value)

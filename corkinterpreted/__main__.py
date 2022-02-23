@@ -11,7 +11,8 @@ def main():
 
         # Parse the tokens into an AST
         parser = Parser(tokens, text)
-        tree, error = parser.parse()
+        tree = parser.parse()
+        error = parser.error
 
         # Did we get an error from the lexer/parser? If so, display it
         if error:
@@ -26,7 +27,7 @@ def main():
             # If we have an error, show it
             if error:
                 print(error)
-            else:
+            elif value:
                 print(value)
 
 

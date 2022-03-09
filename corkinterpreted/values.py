@@ -8,7 +8,7 @@ class Number:
     value: Fraction
 
     def __repr__(self):
-        return f'{self.value if "/" not in str(self.value) else float(self.value)}'
+        return f'{int(self.value) if int(self.value) == self.value else float(self.value)}'
 
     def __add__(self, other):
         match other:

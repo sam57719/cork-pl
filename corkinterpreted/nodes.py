@@ -1,9 +1,10 @@
 from dataclasses import dataclass
+from fractions import Fraction
 
 
 @dataclass
 class NumberNode:
-    value: int | float
+    value: Fraction
 
     def __repr__(self):
         return f'{self.value}'

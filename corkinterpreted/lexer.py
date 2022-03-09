@@ -1,5 +1,6 @@
 from tokens import TokenType, Token
 from exceptions import IllegalCharacter
+from fractions import Fraction
 
 SINGLE_CHAR_TOKEN_TYPES = [t.value for t in TokenType if t.value is not None and len(t.value) == 1]
 
@@ -65,8 +66,7 @@ class Lexer:
             number_str += '0'
 
         # Return Number Token
-        number = float(number_str)
-        return Token(TokenType.NUMBER, int(number) if int(number) == number else number)
+        return Token(TokenType.NUMBER, Fraction(number_str))
 
     def _make_divide_or_floor(self):
         """ Checks whether a '/' could be a '//' and returns either token """

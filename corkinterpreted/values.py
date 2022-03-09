@@ -1,13 +1,14 @@
 from dataclasses import dataclass
 from exceptions import ComplexNumbersNotSupported, ZeroDivisionError
+from fractions import Fraction
 
 
 @dataclass(eq=True)
 class Number:
-    value: int
+    value: Fraction
 
     def __repr__(self):
-        return f'{self.value}'
+        return f'{self.value if "/" not in str(self.value) else float(self.value)}'
 
     def __add__(self, other):
         match other:

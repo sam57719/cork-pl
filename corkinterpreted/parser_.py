@@ -16,8 +16,11 @@ class Parser:
 
     def advance(self):
         try:
-            self.current_token, self.error = next(self.tokens)
-            self.token_list.append(self.current_token)
+            if not self.error:
+                self.current_token, self.error = next(self.tokens)
+                self.token_list.append(self.current_token)
+            else:
+                raise StopIteration
         except StopIteration:
             self.current_token = None
 
